@@ -1,12 +1,139 @@
 openapi: '3.0.2'
 info:
-  title: API Title
+  title: Plumbers' API #sync + asynch
   version: '1.0'
-servers:
-  - url: https://api.server.test/v1
+  description: Plumbers' API description 
+  contact: 
+    name: Valeria Detomas, Alessandra de Stefano, Mauro Famà
+  termsOfService: 'http://swagger.io/terms/'
+
 paths:
-  /test:
-    get:
+  /quotation_request:
+    post: #synchronized request for quotation
+      summary: Add a new request for quotation
+      description: Add a new request for quotation
+      operationId: requestQuotation
       responses:
         '200':
-          description: OK
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quotation"
+        '404':
+          description: Resource Not Found
+
+      requestBody:
+        description: Create a new request for quotation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuotationRequest"
+
+  /result:
+    post: 
+      summary: Add new result
+      description: Add new result, where result means if a worker is selected or not 
+      operationId: addResult
+      responses:
+        '201':
+          description: result created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  message:
+                    type: string
+        '404':
+          description: Resource Not Found
+
+      requestBody:
+        description: Create a new result for the selection of the worker
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Result"
+
+  /result/{id}:
+    get: 
+      summary: Find result by ID
+      description: Returns a single result
+      operationId: getResultById
+      parameters:
+        - name: resultID
+          in: path
+          description: ID of result to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Result not found
+      
+
+  
+
+components:
+  schemas:
+    Quotation:
+      type: object
+      properties:
+        id: 
+          type: integer
+          example: 1
+        plumber:
+          type: string
+          description: Name of the plumber making the quotation
+        quotationPrice:
+          type: number
+          description: Price quoted for the plumber work
+      required:
+        - plumber
+        - quotationPrice
+
+    QuotationRequest:
+      type: object
+      properties:
+        id: 
+          type: integer
+          description: Id of the quotation request
+          example: 1
+        requester:
+          type: string
+          description: Name of the company making the request
+        description:
+          type: string
+          description: Description of the work needed
+        budget:
+          type: number
+          description: Budget for the plumber work
+      required:
+        - requester
+        - description
+
+    Result:
+      type: object  
+      properties:
+        id: 
+          type: integer
+          description: Id of the result
+          example: 1
+        outcome: 
+          type: string
+          description: Outcome of the selection of the workers
+
+  
