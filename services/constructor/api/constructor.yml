@@ -1,12 +1,92 @@
 openapi: '3.0.2'
 info:
-  title: API Title
+  title: API Constructors for HRC
   version: '1.0'
 servers:
-  - url: https://api.server.test/v1
+  - url: http://localhost:8080/
+tags:
+  - name: Constructors  
 paths:
-  /test:
-    get:
+  /quotation_request:
+    post: #synchronized request for quotation
+      tags: 
+        - quotation
+      summary: Add new quotation
+      description: This allows to add a new quotation
+      operationId: requestQuotation
+      requestBody: 
+        description: Detail of the quotation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotationRequest'
+      responses:
+        '200':
+          description: OK, successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+        '404':
+          description: Invalid
+  /result:
+    post:
+      tags: 
+        - result
+      summary: Result of quotation
+      description: This allows to see the result of the request, if a worker has been chosen or not
+      operationId: resultQuotation
+      requestBody: 
+        description: Detail of the result
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Result'
       responses:
         '200':
           description: OK
+        '404':
+          description: Invalid
+          
+components:
+  schemas:
+    Quotation:
+      type: object
+      properties:
+        id: 
+          type: integer
+          example: 1
+        constructor:
+          type: string
+          description: Name of the constructor making the quotation
+        quotationPrice:
+          type: number
+          description: Price quoted for the constructor work
+      required:
+        - constructor
+        - quotationPrice
+
+    QuotationRequest:
+      type: object
+      properties:
+        requester:
+          type: string
+          description: Name of the company making the request
+        description:
+          type: string
+          description: Description of the work needed
+        budget:
+          type: number
+          description: Budget for the plumber work
+      required:
+        - requester
+        - description
+    Result:
+      type: object
+      properties:
+        message:
+          type: string
+        id:
+          type: integer
+          example: 1
+        
