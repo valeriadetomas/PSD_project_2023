@@ -135,5 +135,4 @@ components:
         outcome: 
           type: string
           description: Outcome of the selection of the workers
-
-  
+          
