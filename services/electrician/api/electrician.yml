@@ -1,12 +1,95 @@
 openapi: '3.0.2'
 info:
-  title: API Title
+  title: Electrician API # asynch
   version: '1.0'
-servers:
-  - url: https://api.server.test/v1
 paths:
-  /test:
+  /quotationRequest:
+    post:
+      tags: 
+      - quotation
+      operationId: requestQuotation
+      requestBody:
+        description: Request a quotation for a renovation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotationRequest'
+        required: true
+      responses:
+        "201":
+            description: "Request created"
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    message:
+                      type: string      
+        '405':
+            description: "Invalid Input"
+  
+  /quotationRequest/{id}:        
     get:
+      tags: 
+      - quotation
+      description: Get the quotation of the Electrician
+      operationId: getQuotation
+      parameters:
+      - name: id
+        in: path
+        description: Quotation request identifier
+        required: true
+        schema: 
+          type: integer
+          format: int64
       responses:
         '200':
           description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotation'
+        '202':
+          description: "Request received"
+        '404': 
+          description: "Quotation request not found"
+
+      
+
+
+
+components:
+  schemas:
+    Quotation:
+      type: object
+      properties:
+        id: 
+          type: integer
+          example: 1
+        plumber:
+          type: string
+          description: Name of the plumber making the quotation
+        quotationPrice:
+          type: number
+          description: Price quoted for the plumber work
+      required:
+        - plumber
+        - quotationPrice
+
+    QuotationRequest:
+      type: object
+      properties:
+        requester:
+          type: string
+          description: Name of the company making the request
+        description:
+          type: string
+          description: Description of the work needed
+        budget:
+          type: number
+          description: Budget for the plumber work
+      required:
+        - requester
+        - description
