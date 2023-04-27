@@ -1,5 +1,5 @@
 # Process and Service Design Project
-This project consists in designing and implementing a House Renovation Company (HRC) which which relies on several services:
+This project consists in designing and implementing a House Renovation Company (HRC) which relies on several services:
 
 • Plumbers
 
