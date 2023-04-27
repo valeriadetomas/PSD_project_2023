@@ -1,0 +1,261 @@
+openapi: '3.0.2'
+info:
+  title: Plumbers' API 
+  version: '1.0'
+  description: Plumbers' API description 
+  contact: 
+    name: Valeria Detomas, Alessandra de Stefano, Mauro Famà
+  termsOfService: 'http://swagger.io/terms/'
+
+paths:
+  /quotation_request:
+    post: #synchronized request for quotation
+      summary: Add a new request for quotation
+      description: Add a new request for quotation
+      operationId: requestQuotation
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quotation"
+        '404':
+          description: Resource Not Found
+
+      requestBody:
+        description: Create a new request for quotation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuotationRequest"
+
+  /quotation:
+    post:
+      summary: Add new quotation
+      description: Add new quotation
+      operationId: addQuotation
+      responses:
+        '201':
+          description: Quotation created
+        '404':
+          description: Resource Not Found
+
+      requestBody:
+        description: Create a new quotation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Quotation"
+
+  /result:
+    post: 
+      summary: Add new result
+      description: Add new result, where result means if a worker is selected or not 
+      operationId: addResult
+      responses:
+        '201':
+          description: result created
+        '404':
+          description: Resource Not Found
+
+      requestBody:
+        description: Create a new result for the selection of the worker
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Result"
+    get: 
+      summary: get results
+      description: get results, where result means if a worker is selected or not for works
+      operationId: getResult
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Result'
+        '404':
+          description: Resource Not Found
+
+  /result/{id}:
+    get: 
+      summary: Find result by ID
+      description: Returns a single result
+      operationId: getResultById
+      parameters:
+        - name: resultID
+          in: path
+          description: ID of result to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Result not found
+
+  /report:
+    post:  
+      summary: Add new report
+      description: Add new report, where report is the status of the advancement of the work
+      operationId: addReport
+      responses:
+        '201':
+          description: report created
+        '404':
+          description: Resource Not Found
+
+      requestBody:
+        description: Create a new report 
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Report"
+  
+  /report/{id}:
+    get:
+      summary: Find report by ID
+      description: Returns a single report
+      operationId: getResultById
+      parameters:
+        - name: resultID
+          in: path
+          description: ID of result to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Result not found
+
+    put:
+      summary: Update an existing report
+      description: Update an existing report by Id
+      operationId: updateReport
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Report not found
+        '405':
+          description: Validation exception
+
+      requestBody:
+        description: Update an existent report
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+
+  
+
+
+      
+components:
+  schemas:
+    Quotation:
+      type: object
+      properties:
+        id: 
+          type: integer
+          example: 1
+        plumber:
+          type: string
+          description: Name of the plumber making the quotation
+        quotationPrice:
+          type: number
+          description: Price quoted for the plumber work
+      required:
+        - plumber
+        - quotationPrice
+
+    QuotationRequest:
+      type: object
+      properties:
+        id: 
+          type: integer
+          description: Id of the quotation request
+          example: 1
+        requester:
+          type: string
+          description: Name of the company making the request
+        description:
+          type: string
+          description: Description of the work needed
+        budget:
+          type: number
+          description: Budget for the plumber work
+      required:
+        - id
+        - requester
+        - description
+
+    Result:
+      type: object  
+      properties:
+        id_request: 
+          type: integer
+          description: Id of the related request 
+          example: 1
+        outcome: 
+          type: string
+          description: Outcome of the selection of the workers
+      required:
+        - id_request
+        - outcome
+
+    Report:
+      type: object  
+      properties:
+        id_request: 
+          type: integer
+          description: Id of the related request 
+          example: 1
+        status: 
+          type: string
+          description: work Status
+          enum:
+            - not started
+            - in progress
+            - completed
+          example: not started
+        complete:
+          type: boolean
+      required:
+        - id_request
+        - status
+        - complete
+
+  
