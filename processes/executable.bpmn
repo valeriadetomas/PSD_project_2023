@@ -105,10 +105,6 @@
         <bpmn:incoming>Flow_15uddc6</bpmn:incoming>
         <bpmn:outgoing>Flow_15i82sn</bpmn:outgoing>
       </bpmn:sendTask>
-      <bpmn:receiveTask id="Activity_1j3oirw" name="Receive quotation">
-        <bpmn:incoming>Flow_15i82sn</bpmn:incoming>
-        <bpmn:outgoing>Flow_0whfqn5</bpmn:outgoing>
-      </bpmn:receiveTask>
       <bpmn:endEvent id="Event_057nv6y">
         <bpmn:incoming>Flow_1stpefq</bpmn:incoming>
       </bpmn:endEvent>
@@ -123,6 +119,10 @@
       <bpmn:sequenceFlow id="Flow_15i82sn" sourceRef="Activity_0uwf8hj" targetRef="Activity_1j3oirw" />
       <bpmn:sequenceFlow id="Flow_0whfqn5" sourceRef="Activity_1j3oirw" targetRef="Event_0uhrlgd" />
       <bpmn:sequenceFlow id="Flow_1stpefq" sourceRef="Event_1vhf69p" targetRef="Event_057nv6y" />
+      <bpmn:userTask id="Activity_1j3oirw" name="Collect quotation">
+        <bpmn:incoming>Flow_15i82sn</bpmn:incoming>
+        <bpmn:outgoing>Flow_0whfqn5</bpmn:outgoing>
+      </bpmn:userTask>
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_0evxi69" sourceRef="Gateway_0b67c5m" targetRef="Activity_0d3qr1p" />
     <bpmn:sequenceFlow id="Flow_1rkdhpi" sourceRef="Gateway_0b67c5m" targetRef="Activity_13x103j" />
@@ -497,14 +497,14 @@
       <bpmndi:BPMNShape id="BPMNShape_15fswod" bpmnElement="Activity_0uwf8hj">
         <dc:Bounds x="1070" y="710" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0chfssk" bpmnElement="Activity_1j3oirw">
-        <dc:Bounds x="1230" y="710" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1tnrsiq" bpmnElement="Event_057nv6y">
         <dc:Bounds x="1402" y="810" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1vdhpoz" bpmnElement="Event_0uhrlgd">
         <dc:Bounds x="1402" y="732" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0pva9bj_di" bpmnElement="Activity_1j3oirw">
+        <dc:Bounds x="1230" y="710" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0lg4sty" bpmnElement="Event_1vhf69p">
         <dc:Bounds x="1282" y="772" width="36" height="36" />
