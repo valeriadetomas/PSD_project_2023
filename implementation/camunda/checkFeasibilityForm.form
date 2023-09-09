@@ -1,0 +1,28 @@
+{
+  "components": [
+    {
+      "label": "Form checking work feasibility",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_05ujay0",
+        "columns": null
+      },
+      "id": "Field_03rgitf",
+      "key": "check_feasibility",
+      "description": "The work is eith easible or not",
+      "validate": {
+        "required": true,
+        "pattern": "true|false"
+      }
+    }
+  ],
+  "type": "default",
+  "id": "checkFeasibilityForm",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.14.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.19.0",
+  "schemaVersion": 10
+}

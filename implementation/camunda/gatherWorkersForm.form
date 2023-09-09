@@ -1,0 +1,55 @@
+{
+  "components": [
+    {
+      "label": "plumbers",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_183c3j7",
+        "columns": null
+      },
+      "id": "Field_1vhruv0",
+      "key": "plumber",
+      "validate": {
+        "pattern": "true|false",
+        "required": true
+      }
+    },
+    {
+      "label": "electricians",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0p9yhec",
+        "columns": null
+      },
+      "id": "Field_0h4jdqp",
+      "key": "electrician",
+      "validate": {
+        "pattern": "true|false",
+        "required": true
+      }
+    },
+    {
+      "label": "constructors",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_08no9yo",
+        "columns": null
+      },
+      "id": "Field_1qa3dis",
+      "key": "constructo",
+      "validate": {
+        "pattern": "true|false",
+        "required": true
+      }
+    }
+  ],
+  "type": "default",
+  "id": "gatherWorkersForm",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.14.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.19.0",
+  "schemaVersion": 10
+}
