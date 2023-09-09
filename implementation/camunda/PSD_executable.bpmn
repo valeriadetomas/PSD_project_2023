@@ -37,6 +37,20 @@
               <camunda:value>p3</camunda:value>
             </camunda:list>
           </camunda:outputParameter>
+          <camunda:outputParameter name="list_electricians">
+            <camunda:list>
+              <camunda:value>e1</camunda:value>
+              <camunda:value>e2</camunda:value>
+              <camunda:value>e3</camunda:value>
+            </camunda:list>
+          </camunda:outputParameter>
+          <camunda:outputParameter name="list_constructors">
+            <camunda:list>
+              <camunda:value>c1</camunda:value>
+              <camunda:value>c2</camunda:value>
+              <camunda:value>c3</camunda:value>
+            </camunda:list>
+          </camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_19b59gw</bpmn:incoming>
@@ -89,7 +103,7 @@
     <bpmn:subProcess id="multi_instance_e">
       <bpmn:incoming>Flow_0evxi69</bpmn:incoming>
       <bpmn:outgoing>Flow_1puhpsu</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${electricians.elements()}" camunda:elementVariable="electrician" />
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="list_electricians" camunda:elementVariable="e" />
       <bpmn:startEvent id="Event_18mdr98">
         <bpmn:outgoing>Flow_1sjglp7</bpmn:outgoing>
       </bpmn:startEvent>
@@ -121,7 +135,7 @@
     <bpmn:subProcess id="multi_instance_c">
       <bpmn:incoming>Flow_1rkdhpi</bpmn:incoming>
       <bpmn:outgoing>Flow_0i7n6y1</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${constructors.elements()}" camunda:elementVariable="constructor" />
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="list_constructors" camunda:elementVariable="c" />
       <bpmn:startEvent id="Event_1os23q0">
         <bpmn:outgoing>Flow_15uddc6</bpmn:outgoing>
       </bpmn:startEvent>
