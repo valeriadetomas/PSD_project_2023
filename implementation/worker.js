@@ -55,6 +55,7 @@ client.subscribe('send_req_quot_plumber', async function({ task, taskService }) 
       try {
         responseBody = JSON.parse(body);
         if (responseBody != null) {
+          console.log('Response BODY:', responseBody);
           console.log('Response id:', responseBody.id);
           console.log('Response Plumber:', responseBody.plumber);
           console.log('Response quot:', responseBody.quotationPrice);
