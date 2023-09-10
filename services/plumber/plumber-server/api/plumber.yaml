@@ -208,6 +208,9 @@ components:
           type: integer
           description: Id of the quotation request
           example: 1
+        receiver:
+          type: string
+          description: Name of the plumber receiving the request
         requester:
           type: string
           description: Name of the company making the request
@@ -219,6 +222,7 @@ components:
           description: Budget for the plumber work
       required:
         - id
+        - receiver
         - requester
         - description
 

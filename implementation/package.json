@@ -1,8 +1,8 @@
 {
   "name": "implementation",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "worker.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "camunda-external-task-client-js": "^3.0.1"
+    "camunda-external-task-client-js": "^3.0.1",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "open": "^9.1.0"
-  }
+  },
+  "description": ""
 }

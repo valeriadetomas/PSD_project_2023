@@ -15,6 +15,26 @@
       }
     },
     {
+      "label": "Work Description",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_183c3j7",
+        "columns": null
+      },
+      "id": "Field_0km90ud",
+      "key": "plumber_descr"
+    },
+    {
+      "label": "Budget",
+      "type": "number",
+      "layout": {
+        "row": "Row_183c3j7",
+        "columns": null
+      },
+      "id": "Field_1mduass",
+      "key": "plumber_budget"
+    },
+    {
       "label": "electricians",
       "type": "textfield",
       "layout": {
@@ -29,6 +49,26 @@
       }
     },
     {
+      "label": "Work Description",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0p9yhec",
+        "columns": null
+      },
+      "id": "Field_0e72j8m",
+      "key": "electr_descr"
+    },
+    {
+      "label": "Budget",
+      "type": "number",
+      "layout": {
+        "row": "Row_0p9yhec",
+        "columns": null
+      },
+      "id": "Field_1n5d1od",
+      "key": "electr_budget"
+    },
+    {
       "label": "constructors",
       "type": "textfield",
       "layout": {
@@ -41,6 +81,26 @@
         "pattern": "true|false",
         "required": true
       }
+    },
+    {
+      "label": "Work Description",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_08no9yo",
+        "columns": null
+      },
+      "id": "Field_0p05v08",
+      "key": "constr_descr"
+    },
+    {
+      "label": "Budget",
+      "type": "number",
+      "layout": {
+        "row": "Row_08no9yo",
+        "columns": null
+      },
+      "id": "Field_1t8ru5b",
+      "key": "constr_budget"
     }
   ],
   "type": "default",

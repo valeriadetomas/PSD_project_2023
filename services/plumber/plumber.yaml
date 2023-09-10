@@ -7,6 +7,10 @@ info:
     name: Valeria Detomas, Alessandra de Stefano, Mauro Famà
   termsOfService: 'http://swagger.io/terms/'
 
+servers:
+- url: http://localhost:9090/
+  description: Local Server
+
 paths:
   /quotation_request:
     post: #synchronized request for quotation
@@ -211,6 +215,9 @@ components:
         requester:
           type: string
           description: Name of the company making the request
+        receiver: 
+          type: string
+          description: Name of the plumber receiving the request
         description:
           type: string
           description: Description of the work needed
@@ -225,6 +232,9 @@ components:
     Result:
       type: object  
       properties:
+        name_plumber:
+          type: string
+          description: name of the plumber
         id_request: 
           type: integer
           description: Id of the related request 
@@ -233,6 +243,7 @@ components:
           type: string
           description: Outcome of the selection of the workers
       required:
+        - name_plumber
         - id_request
         - outcome
 
