@@ -89,6 +89,7 @@
       </bpmn:endEvent>
       <bpmn:endEvent id="Event_1fvbutm">
         <bpmn:incoming>Flow_1e60phf</bpmn:incoming>
+        <bpmn:terminateEventDefinition id="TerminateEventDefinition_19knly2" />
       </bpmn:endEvent>
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_0rmh4x5" sourceRef="Gateway_0b67c5m" targetRef="multi_instance_p">
@@ -418,7 +419,7 @@
       <bpmndi:BPMNShape id="Event_0lf015h_di" bpmnElement="Event_1t6i34c">
         <dc:Bounds x="1402" y="164" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0c34lcf_di" bpmnElement="Event_1fvbutm">
+      <bpmndi:BPMNShape id="Event_0pkg8gk_di" bpmnElement="Event_1fvbutm">
         <dc:Bounds x="1402" y="242" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_15bk3iy_di" bpmnElement="Event_15bk3iy">

@@ -50,16 +50,11 @@ client.subscribe('send_req_quot_plumber', async function({ task, taskService }) 
     if (!error && response.statusCode === 200) {
       console.log('Request for quotation sent successfully');
       
-      let responseBody;
-
       try {
-        responseBody = JSON.parse(body);
-        if (responseBody != null) {
-          console.log('Response BODY:', responseBody);
-          console.log('Response id:', responseBody.id);
-          console.log('Response Plumber:', responseBody.plumber);
-          console.log('Response quot:', responseBody.quotationPrice);
-          processVariables.set(responseBody.plumber + "_quotation", responseBody.quotationPrice);
+        const prova = JSON.parse(body);
+        const prova2 = JSON.parse(prova);
+        if (prova2 != null) {
+          processVariables.set(prova2.plumber + "_quotation", prova2.quotationPrice);
           // Complete the Camunda task
           taskService.complete(task, processVariables, localVariables);
         }
@@ -80,30 +75,33 @@ client.subscribe('send_req_quot_plumber', async function({ task, taskService }) 
 client.subscribe('analyze_offers_plumb', async function({ task, taskService }) {
 
   const list_p = task.variables.get("list_plumbers");
-  const list_quot = [];
+  let list_quot = [];
+
+  list_p.forEach((element) => {
+    console.log(element)
+    });
 
 
   list_p.forEach(p => {
-    const quot = task.variables.get(p + "_quotation")
+    let quot = task.variables.get(p + "_quotation")
 
     list_quot.push(quot);
 
-    console.log(p + quot);
+    console.log(p + ' ' + quot);
   });
 
   const processVariables = new Variables();
   const localVariables = new Variables();
 
-  const minValue = 0;
-  const winner = '';
-  const results_plumbers = [];
+  let minValue = 0;
+  let results_plumbers = [];
   
 
-  for (let i = 1; i < list_quot.length; i++) {
+  for (let i = 0; i < list_quot.length; i++) {
     results_plumbers.push([[list_p[i]], 'loser']);
     if (list_quot[i] < minValue) {
       minValue = list_quot[i];
-      results_plumbers[i][2] = 'winner';
+      results_plumbers[i][1] = 'winner';
     }
   }
 
