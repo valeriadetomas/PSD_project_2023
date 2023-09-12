@@ -51,10 +51,10 @@ client.subscribe('send_req_quot_plumber', async function({ task, taskService }) 
       console.log('Request for quotation sent successfully');
       
       try {
-        const prova = JSON.parse(body);
-        const prova2 = JSON.parse(prova);
-        if (prova2 != null) {
-          processVariables.set(prova2.plumber + "_quotation", prova2.quotationPrice);
+        const quot_resp = JSON.parse(JSON.parse(body));
+        if (quot_resp != null) {
+          processVariables.set(quot_resp.plumber + "_quotation", quot_resp.quotationPrice);
+          processVariables.set("id_quotation_" + quot_resp.plumber, quot_resp.id)
           // Complete the Camunda task
           taskService.complete(task, processVariables, localVariables);
         }
@@ -74,57 +74,66 @@ client.subscribe('send_req_quot_plumber', async function({ task, taskService }) 
 // susbscribe to the topic: 'analyze_offers_plumb'
 client.subscribe('analyze_offers_plumb', async function({ task, taskService }) {
 
-  const list_p = task.variables.get("list_plumbers");
+  //const list_p = task.variables.get("list_plumbers");
+  const list_p = ['p1', 'p2', 'p3'];
   let list_quot = [];
-
-  list_p.forEach((element) => {
-    console.log(element)
-    });
-
+  let list_p_available = [];
 
   list_p.forEach(p => {
     let quot = task.variables.get(p + "_quotation")
 
-    list_quot.push(quot);
-
-    console.log(p + ' ' + quot);
+    if (quot != undefined){
+      list_quot.push(quot);
+      list_p_available.push(p);
+      console.log("plumer: " +  p + 'Quotation: ' + quot);
+    }
   });
 
   const processVariables = new Variables();
   const localVariables = new Variables();
 
-  let minValue = 0;
-  let results_plumbers = [];
+  let minValue = list_quot[0] + 10;
+  let winner_name = '';
   
-
   for (let i = 0; i < list_quot.length; i++) {
-    results_plumbers.push([[list_p[i]], 'loser']);
     if (list_quot[i] < minValue) {
       minValue = list_quot[i];
-      results_plumbers[i][1] = 'winner';
-    }
+    } 
   }
 
-  processVariables.set("results_plumbers", results_plumbers);
+  for (let i = 0; i < list_quot.length; i++) {
+    if (list_quot[i] <= minValue){
+      winner_name = list_p_available[i];
+      console.log('winner plumber name: ', winner_name);
+      processVariables.set("winner_plumber_name", winner_name);
+    }
+  }
+  
   taskService.complete(task, processVariables, localVariables);
 
 });
 
+//subscribe to the topic to send results to the plumbers
 client.subscribe('send_res_plumbers', async function({ task, taskService }) {
   
   const res_p = task.variables.get("res_p");
-  console.log('Sending result to ' + res_p);
- 
+  const win = task.variables.get("winner_plumber_name");
+  const id_quot = parseInt(task.variables.get("id_quotation_" + win));
+
+  let outcome = '';
+  if (res_p == win) outcome = "winner";
+  else outcome = "loser";
+
   // Define the request body
   const requestBody = {
-    name_plumber: res_p[1],
-    id: 1,
-    outcome: res_p[2],
+    name_plumber: res_p,
+    id: id_quot,
+    outcome: outcome,
   };
 
   // Configure the POST request options
   const requestOptions = {
-    url: 'http://localhost:9090/quotation_request',
+    url: 'http://localhost:9090/result',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -132,23 +141,61 @@ client.subscribe('send_res_plumbers', async function({ task, taskService }) {
     body: JSON.stringify(requestBody),
   };
 
+  // Send the POST request
+  request(requestOptions, function(error, response, body) {
+    if (!error && response.statusCode === 200) {
+      const mess = JSON.parse(body);
+      console.log(mess.message);
+      // Complete the Camunda task
+      taskService.complete(task);
+    } else {
+      console.error('Error sending result:', error);
+      console.error('Response:', body);
+    }
+  });
+});
+
+
+//get report by the id of the related request
+client.subscribe('receive_report_plumber', async function({ task, taskService }) {
+
+  const win = task.variables.get("winner_plumber_name");
+  const reportID = parseInt(task.variables.get("id_quotation_" + win), 10);
+
+  // Configure the GET request options
+  const requestOptions = {
+    url: `http://localhost:9090/report/${reportID}`, 
+    method: 'GET',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+  };
+
   const processVariables = new Variables();
   const localVariables = new Variables();
+
+  console.log('Waiting for report n: ' + reportID + ' from plumber: ' + win);
 
   // Send the POST request
   request(requestOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log('Result sent successfully');
-
-      if (res_p[2] == 'winner'){
-        localVariables.set("accepted", true)
+      console.log('Report received successfully');
+      
+      try {
+        const report_resp = JSON.parse(JSON.parse(body));
+        if (report_resp != null) {
+          console.log("Report_plumber: ", report_resp.status);
+          processVariables.set("plumber_report", report_resp.status);
+          // Complete the Camunda task
+          taskService.complete(task, processVariables, localVariables);
+        }
+        
+      } catch (error) {
+        console.error('Error parsing response:', error);
       }
-      else localVariables.set("accepted", false)
 
-      // Complete the Camunda task
-      taskService.complete(task, processVariables, localVariables);
     } else {
-      console.error('Error sending request for quotation:', error);
+      console.error('Error sending request for report:', error);
       console.error('Response:', body);
     }
   });
@@ -217,7 +264,7 @@ client.subscribe('get_elec_quotation', async function({ task, taskService }) {
   // Send the GET request
   request(requestOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log('Quotation retrieval successful');
+      console.log('Quotation retrieval from electrcian successful');
 
     try {
         const external_body = JSON.parse(body);
@@ -233,7 +280,7 @@ client.subscribe('get_elec_quotation', async function({ task, taskService }) {
     }
     
     } else {
-      console.error('Error sending request for quotation:', error);
+      console.error('Error getting request for quotation:', error);
       console.error('Response:', body);
     }
   });
@@ -243,9 +290,9 @@ client.subscribe('get_elec_quotation', async function({ task, taskService }) {
 client.subscribe('select_desired_worker', async function({ task, taskService }) {
   let list = ["e1", "e2", "e3"]
   let min = Infinity;
-  let losers = []
-  let winner
-  let index
+  let losers = [];
+  let winner;
+  let index;
 
   const processVariables = new Variables();
   const localVariables = new Variables();
@@ -263,7 +310,7 @@ client.subscribe('select_desired_worker', async function({ task, taskService }) 
     }
   });
 
-  console.log("winner", winner)
+  console.log("winner electrican name: ", winner)
   processVariables.set("winner_e", winner)
  
   losers.splice(index, 1)
@@ -283,7 +330,7 @@ client.subscribe('inform_winner', async function({ task, taskService }) {
 
   const winner = task.variables.get("winner_e");
 
-  console.log('Sending confirmation to ' + winner);
+  console.log('Sending confirmation to electrician: ' + winner);
 
   // Define the request body
   const requestBody = {
@@ -303,7 +350,7 @@ client.subscribe('inform_winner', async function({ task, taskService }) {
   // Send the POST request
   request(requestOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log('Confirmation sent successfully');  
+      console.log('Confirmation to electrician sent successfully');  
 
       const processVariables = new Variables();
       const localVariables = new Variables();
@@ -322,7 +369,7 @@ client.subscribe('inform_winner', async function({ task, taskService }) {
       } 
     
     } else {
-      console.error('Error sending request for quotation:', error);
+      console.error('Error sending confirmation to electrician:', error);
       console.error('Response:', body);
     }
   });
@@ -358,7 +405,7 @@ client.subscribe('inform_losers', async function({ task, taskService }) {
         console.log('Refusal sent successfully', response)
         taskService.complete(task, processVariables, localVariables);
       } else {
-        console.error('Error sending request for quotation:', error);
+        console.error('Error informing loser:', error);
         console.error('Response:', body);
       }
     });
@@ -391,7 +438,7 @@ client.subscribe('request_report_e', async function({ task, taskService }) {
   // Send the POST request
   request(requestOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log('Report request sent successfully');
+      console.log('Report request to electrician sent successfully');
 
     try {
         const external_body = JSON.parse(body);
@@ -404,7 +451,7 @@ client.subscribe('request_report_e', async function({ task, taskService }) {
     }
     
     } else {
-      console.error('Error sending request for quotation:', error);
+      console.error('Error sending request for report:', error);
       console.error('Response:', body);
     }
   });
@@ -431,7 +478,7 @@ client.subscribe('receive_report_e', async function({ task, taskService }) {
   // Send the GET request
   request(requestOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log('Report retrieval successful');
+      console.log('Report retrieval from electrician successful');
 
     try {
         const external_body = JSON.parse(body);
@@ -460,6 +507,66 @@ client.subscribe('analyze_report_e', async function({ task, taskService }) {
   const localVariables = new Variables();
 
   processVariables.set("electrician_completed", complete);
+
+  console.log("ELECTRICIAN WORK COMPLETED");
   taskService.complete(task, processVariables, localVariables);
+
+});
+
+
+client.subscribe('renovation_completed', async function({ task, taskService }) {
+
+  const processVariables = new Variables();
+  const localVariables = new Variables();
+
+  const complete = 'true';
+
+  processVariables.set("renovation_complete", complete);
+
+  console.log("RENOVATION COMPLETED");
+  taskService.complete(task, processVariables, localVariables);
+
+});
+
+
+client.subscribe('confirm_start', async function({ task, taskService }) {
+
+  const win = task.variables.get("winner_plumber_name");
+  const reportID = parseInt(task.variables.get("id_quotation_" + win), 10);
+
+  // Define the request body
+  const requestBody = {
+    id_request: reportID,
+    status: 'not started', 
+  };
+
+  // Configure the POST request options
+  const requestOptions = {
+    url: 'http://localhost:9090/report',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestBody),
+  };
+
+  const processVariables = new Variables();
+  const localVariables = new Variables();
+
+  // Send the POST request
+  request(requestOptions, function(error, response, body) {
+    if (!error && response.statusCode === 200) {
+      console.log('Created report for plumber successfully');
+
+      console.log("RENOVATION CAN START NOW");
+      taskService.complete(task, processVariables, localVariables);
+    
+    } else {
+      console.error('Error sending request for quotation:', error);
+      console.error('Response:', body);
+    }
+  });
+
+  
 
 });
