@@ -1,0 +1,18 @@
+{
+    "name": "electrician-api",
+    "version": "1.0",
+    "description": "No description provided",
+    "license": "UNLICENSED",
+    "type": "module",
+    "private": true,
+    "main": "index.js",
+    "scripts": {
+        "prestart": "npm install --only=prod",
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "@oas-tools/core": "^3.0.0",
+        "crypto": "^1.0.1",
+        "express": "^4.18.0"
+    }
+}

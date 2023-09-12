@@ -1,7 +1,7 @@
 export function sendConfirmation(req, res) {
 
     const report_id = {
-        id: Math.floor(Math.random() * 100),
+        id: 1,
         message: "Thanks"
     };
 

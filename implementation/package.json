@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "camunda-external-task-client-js": "^3.0.1",
+    "crypto": "^1.0.1",
     "request": "^2.88.2"
   },
   "devDependencies": {
