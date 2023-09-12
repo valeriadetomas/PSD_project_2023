@@ -8,12 +8,14 @@ export function requestQuotation(req, res) {
         return;
     }
 
-    // Create a quotation object with the description as the plumber's name
-    const quotation = {
-        id: 1,
-        constructo: receiver,
-        quotationPrice: 500,
-    };
+    // Create a quotation object with the description as the constructor's name
+    const quotation = 
+
+        {
+            id: Math.floor(Math.random() * 10),
+            constructor: receiver,
+            quotationPrice: Math.floor(Math.random() * 100),
+        };
 
     // Send the quotation object as the response
     res.status(200).json(quotation);

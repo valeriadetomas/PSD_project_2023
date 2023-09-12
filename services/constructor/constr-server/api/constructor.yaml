@@ -35,7 +35,7 @@ paths:
     post: 
       summary: Add a new quotation 
       description: This allows to add a new quotation 
-      operationId: addQuotation
+      operationId: requestQuotation
       requestBody: 
         description: Detail of the quotation posted
         content:
@@ -180,15 +180,9 @@ components:
     QuotationRequest:
       type: object
       properties:
-        id:
-          type: integer
-          description: id to identify the request
         requester:
           type: string
           description: Name of the company making the request
-        receiver: 
-          type: string
-          description: used to see who is the receiver
         description:
           type: string
           description: Description of the work needed
@@ -196,7 +190,6 @@ components:
           type: number
           description: Budget for the plumber work
       required:
-        - id
         - requester
         - description
     Result:

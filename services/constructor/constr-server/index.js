@@ -1,6 +1,7 @@
-const http = require('http');
-const express = require("express");
-const { initialize } = require('@oas-tools/core');
+
+import http from "http";
+import express from "express";
+import { initialize } from "@oas-tools/core";
 
 
 const serverPort = 9092;

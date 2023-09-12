@@ -1,6 +1,6 @@
-const service = require('../services/quotationService.js');
+import * as service from '../services/quotationService.js';
 
-module.exports.requestQuotation = function requestQuotation(req, res) {
-    service.requestQuotation(req, res);
+export function postQuotation(req, res) {
+    service.postQuotation(req, res);
 }
 
