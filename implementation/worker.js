@@ -224,7 +224,7 @@ client.subscribe('get_elec_quotation', async function({ task, taskService }) {
         const inner_body = JSON.parse(external_body);
         if (inner_body != null) {
           processVariables.set(e + "_quotation", inner_body.quotationPrice);
-          processVariables.set(e + "_name", inner_body.plumber);
+          processVariables.set(e + "_name", inner_body.electrician);
           // Complete the Camunda task
           taskService.complete(task, processVariables, localVariables);
         }
@@ -240,7 +240,6 @@ client.subscribe('get_elec_quotation', async function({ task, taskService }) {
 });
 
 // select the cheaper electrician as winner, all the rest are losers
-// returns a list of losers "losers_e" and a variable "winner_e"
 client.subscribe('select_desired_worker', async function({ task, taskService }) {
   let list = ["e1", "e2", "e3"]
   let min = Infinity;
@@ -304,7 +303,7 @@ client.subscribe('inform_winner', async function({ task, taskService }) {
   // Send the POST request
   request(requestOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log('Confirmation sent successfully');
+      console.log('Confirmation sent successfully');  
 
       const processVariables = new Variables();
       const localVariables = new Variables();

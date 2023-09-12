@@ -1,8 +1,8 @@
 export function getQuotation(req, res) {
 
     const quotation = {
-        id: 1,
-        plumber: "plumber_name",
+        id: Math.floor(Math.random() * 10),
+        electrician: "awesome electrician",
         quotationPrice: Math.floor(Math.random() * 100),
     };
 
