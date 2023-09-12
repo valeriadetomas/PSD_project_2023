@@ -4,7 +4,7 @@ import express from "express";
 import { initialize } from "@oas-tools/core";
 
 
-const serverPort = 8080;
+const serverPort = 9091;
 const app = express();
 app.use(express.json({limit: '50mb'}));
 

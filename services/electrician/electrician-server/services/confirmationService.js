@@ -1,6 +1,12 @@
 export function sendConfirmation(req, res) {
-    res.send({
-        message: 'This is the mockup controller for sendConfirmation'
-    });
+
+    const report_id = {
+        id: Math.floor(Math.random() * 100),
+        message: "Thanks"
+    };
+
+    // Send the quotation object as the response
+    res.status(200).json(report_id);
+    
 }
 

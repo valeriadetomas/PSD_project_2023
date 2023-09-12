@@ -1,23 +1,14 @@
-import { Quotation } from "./Quotation";
-
-var quotations = []
-
-var token = 0;
-
-export function addQuotation(q){
-    quotations.push(q)
-}
-
-export function newQuotationToken(){
-    token = token + 1;
-    return token;
-}
-
 export function getQuotation(req, res) {
-    // find the quotation by the id in the request
-    res.send({
-        message: 'This is the mockup controller for getQuotation'
-    });
+
+    const quotation = {
+        id: Math.floor(Math.random() * 10),
+        electrician: "awesome electrician",
+        quotationPrice: Math.floor(Math.random() * 100),
+    };
+
+    // Send the quotation object as the response
+    res.status(200).json(quotation);
+
 }
 
 

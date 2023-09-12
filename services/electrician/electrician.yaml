@@ -8,7 +8,7 @@ paths:
   /quotationRequest:
     post: # asynch communication
       tags: 
-      - quotation
+      - external
       operationId: requestQuotation
       requestBody:
         description: Request a quotation for a renovation
@@ -16,9 +16,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/QuotationRequest'
-        required: true
+        required: false
       responses:
-        "201":
+        "200":
             description: "Request created"
             content:
               application/json:
@@ -33,20 +33,45 @@ paths:
             description: "Invalid Input"
 
 # external
+  /reportRequest:
+    post: # asynch communication
+      tags: 
+      - external
+      operationId: requestReport
+      requestBody:
+        description: Request for report
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+        required: false
+      responses:
+        "200":
+            description: "Request created"
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    comment:
+                      type: string  
+        '405':
+            description: "Invalid Input"            
+
+# external
   /quotationRequest/{id}:        
     get:
       tags: 
-      - quotation
+      - external
       description: Get the quotation of the Electrician
       operationId: getQuotation
       parameters:
       - name: id
         in: path
-        description: Quotation request identifier
+        description: Quotation requester identifier
         required: true
         schema: 
-          type: integer
-          format: int64
+          type: string
       responses:
         '200':
           description: OK
@@ -63,12 +88,12 @@ paths:
   /confirmation:
     post: 
       tags: 
-      - inform service
+      - external
       description: Send job starting confirmation to the company
       operationId: sendConfirmation
 
       responses:
-        "201":
+        "200":
             description: "Job started"
             content:
               application/json:
@@ -84,7 +109,7 @@ paths:
 
       requestBody:
         description: Confirm the job assignment
-        required: true
+        required: false
         content:
           application/json:
             schema:
@@ -94,7 +119,7 @@ paths:
   /refuse:
       post:
         tags:
-        - inform service
+        - external
         description: Inform the service that was not chosen by the HRC
         operationId: sendConfirmation
 
@@ -106,7 +131,6 @@ paths:
               schema:
                   type: string
 
-
         responses:
             '200':
               description: OK
@@ -117,7 +141,7 @@ paths:
   /report/{id}:
     get:
       tags: 
-      - job
+      - external
       description: Get the job report
       operationId: getJob
       parameters:
@@ -145,7 +169,7 @@ paths:
   /report:
     post:
       tags:
-        - job
+        - internal
       description: Post job report
       operationId: postJob
 
@@ -166,24 +190,21 @@ paths:
   /quotation:
     post:
       tags:
-        - quotation
+        - internal
       operationId: postQuotation
+      
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Quotation'
         required: true
+
       responses:
         '200':
           description: OK
         '405':
           description: "Invalid Input"
-
-
-
-      
-
 
 
 components:
@@ -194,14 +215,14 @@ components:
         id: 
           type: integer
           example: 1
-        plumber:
+        electrician:
           type: string
-          description: Name of the plumber making the quotation
+          description: Name of the Electrician making the quotation
         quotationPrice:
           type: number
           description: Price quoted for the plumber work
       required:
-        - plumber
+        - electrician
         - quotationPrice
 
     QuotationRequest:
@@ -219,6 +240,13 @@ components:
       required:
         - requester
         - description
+
+    ReportRequest:
+      type: object
+      properties:
+        id:
+          type: number
+          description: ID of the report
     
     Confirmation:
       type: object  
