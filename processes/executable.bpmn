@@ -187,7 +187,7 @@
       <bpmn:outgoing>Flow_16cadsc</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0s9hrcz" name="no" sourceRef="work_finished" targetRef="Activity_1xqpuwk">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${plumber_report=='not started' || plumber_report=='not started'}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${plumber_report=='not started' || plumber_report=='in progress'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1hcziwp" sourceRef="request_report_e" targetRef="receive_report_e" />
     <bpmn:sequenceFlow id="Flow_1eqqjib" sourceRef="receive_report_e" targetRef="analyze_report_e" />
@@ -229,11 +229,11 @@
       <bpmn:incoming>Flow_0knhvn7</bpmn:incoming>
       <bpmn:outgoing>Flow_0c3qr1o</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="request_report_e" name="Request report" camunda:asyncAfter="true" camunda:type="external" camunda:topic="request_report_e">
+    <bpmn:serviceTask id="request_report_e" name="Request report" camunda:type="external" camunda:topic="request_report_e">
       <bpmn:incoming>Flow_1j1szbt</bpmn:incoming>
       <bpmn:outgoing>Flow_1hcziwp</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="receive_report_e" name="Receive report" camunda:asyncAfter="true" camunda:type="external" camunda:topic="receive_report_e">
+    <bpmn:serviceTask id="receive_report_e" name="Receive report" camunda:type="external" camunda:topic="receive_report_e">
       <bpmn:incoming>Flow_1hcziwp</bpmn:incoming>
       <bpmn:incoming>Flow_0d4zsv2</bpmn:incoming>
       <bpmn:outgoing>Flow_1eqqjib</bpmn:outgoing>
