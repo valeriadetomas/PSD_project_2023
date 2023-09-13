@@ -6,7 +6,7 @@ export function postReport(req, res) {
 
 export function getReport(req, res) {
     const report = {
-        id: 3,
+        id: Math.floor(Math.random() * 10),
         status: "completed",
         complete: true
     };

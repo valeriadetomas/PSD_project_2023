@@ -179,7 +179,7 @@ client.subscribe('receive_report_plumber', async function({ task, taskService })
   // Send the POST request
   request(requestOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log('Report received successfully');
+      console.log('Report plumber received successfully');
       
       try {
         const report_resp = JSON.parse(JSON.parse(body));
@@ -609,7 +609,7 @@ client.subscribe('send_req_quot_const', async function({ task, taskService }) {
   // Send the POST request
   request(requestOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log('Request for quotation sent successfully');
+      console.log('Request for quotation sent successfully to the constructor');
       
       try {
         const parsed_body = JSON.parse(body);
@@ -704,7 +704,7 @@ client.subscribe('rec_eow_c', async function({ task, taskService }) {
         const parsed_body = JSON.parse(body);
         const parsed_parsed_body = JSON.parse(parsed_body);
         console.log(parsed_parsed_body);
-        console.log('END OF WORK');
+        console.log('END OF WORK CONSTRUCTOR');
         if (parsed_parsed_body != null) {
           processVariables.set("constructor_status", parsed_parsed_body.status);
           processVariables.set("constructor_complete", parsed_parsed_body.complete);
