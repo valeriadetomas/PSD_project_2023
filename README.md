@@ -44,8 +44,10 @@ The HRC requests the external service to emit a report of the current status, it
 ![Collaboration Diagram](https://github.com/valeriadetomas/PSD_project_2023/blob/main/processes/collaboration%20diagram.png)
 
 ## Implementation
-The **synchronous** message exchange is implemented with a *POST* to perform the sending of the message, the response of the *POST* request is the inbound message.
-The **asynchronous** message exchange happens firstly with a *POST*, in which the response body contains the ID of the message exchange, and then a *GET* request on the ID is performed to retrieve the response message.
+The **synchronous** message exchange is implemented with a *POST* to perform the sending of the message, the response of the *POST* request is the inbound message. \
+The **asynchronous** message exchange happens firstly with a *POST*, in which the response body contains the ID of the message exchange, and then a *GET* request on the ID is performed to retrieve the response message. \
+We used the **parallel multi-instance** subprocess to handle different companies of the same external service during the request for quotation phase. \
+Several **service tasks** are used to manage the flow of information, especially to make choices based on the evaluation of the best offer. **User tasks** are also used in the first phase of the process in order to have a custom setup of the execution.
 
 ### Executable process
 ![Executable Model](https://github.com/valeriadetomas/PSD_project_2023/blob/main/processes/executable.png)
