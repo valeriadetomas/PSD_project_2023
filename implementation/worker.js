@@ -179,12 +179,15 @@ client.subscribe('receive_report_plumber', async function({ task, taskService })
   // Send the POST request
   request(requestOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log('Report plumber received successfully');
       
       try {
         const report_resp = JSON.parse(JSON.parse(body));
         if (report_resp != null) {
-          console.log("Report_plumber: ", report_resp.status);
+          console.log("Received report plumber: ", report_resp.status);
+
+          if (report_resp.status == "completed"){
+            console.log("PLUMBER WORK IS DONE");
+          }
           processVariables.set("plumber_report", report_resp.status);
           // Complete the Camunda task
           taskService.complete(task, processVariables, localVariables);
@@ -531,41 +534,51 @@ client.subscribe('renovation_completed', async function({ task, taskService }) {
 
 client.subscribe('confirm_start', async function({ task, taskService }) {
 
-  const win = task.variables.get("winner_plumber_name");
-  const reportID = parseInt(task.variables.get("id_quotation_" + win), 10);
+  const is_plumber = task.variables.get('plumbers');
 
-  // Define the request body
-  const requestBody = {
-    id_request: reportID,
-    status: 'not started', 
-  };
+  if (is_plumber == 'true'){
+    const win = task.variables.get("winner_plumber_name");
+    const reportID = parseInt(task.variables.get("id_quotation_" + win), 10);
+  
+    // Define the request body
+    const requestBody = {
+      id_request: reportID,
+      status: 'not started', 
+    };
+  
+    // Configure the POST request options
+    const requestOptions = {
+      url: 'http://localhost:9090/report',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    };
+  
+    const processVariables = new Variables();
+    const localVariables = new Variables();
+  
+    // Send the POST request
+    request(requestOptions, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        console.log('Created report for plumber successfully');
+  
+        console.log("RENOVATION CAN START NOW");
+        taskService.complete(task, processVariables, localVariables);
+      
+      } else {
+        console.error('Error sending request for quotation:', error);
+        console.error('Response:', body);
+      }
+    });
+  }
+  else{
+    console.log("RENOVATION CAN START NOW");
+    taskService.complete(task);
+  }
 
-  // Configure the POST request options
-  const requestOptions = {
-    url: 'http://localhost:9090/report',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody),
-  };
-
-  const processVariables = new Variables();
-  const localVariables = new Variables();
-
-  // Send the POST request
-  request(requestOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      console.log('Created report for plumber successfully');
-
-      console.log("RENOVATION CAN START NOW");
-      taskService.complete(task, processVariables, localVariables);
-    
-    } else {
-      console.error('Error sending request for quotation:', error);
-      console.error('Response:', body);
-    }
-  });
+  
 
   
 
